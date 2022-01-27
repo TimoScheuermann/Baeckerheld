@@ -10,6 +10,10 @@ export interface Bakery {
   street?: string;
   streetNumber?: string;
   zip?: number;
+  location: {
+    type: 'Point';
+    coordinates: [number, number];
+  };
 }
 
 export interface OpeningHours {

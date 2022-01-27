@@ -70,38 +70,40 @@
         </section>
       </vm-grid>
       <br />
-    </template>
-
-    <template v-if="products">
-      <vm-flow>
-        <vm-title subtitle="Übersicht" title="Produkte" />
+      <template v-if="products">
         <vm-flow>
-          <vm-button round>
-            <bi-plus height="16px" />
-          </vm-button>
+          <vm-title subtitle="Übersicht" title="Produkte" />
+          <vm-flow>
+            <vm-button
+              round
+              @click="$store.commit('dialog_register_product', bakery)"
+            >
+              <bi-plus height="16px" />
+            </vm-button>
+          </vm-flow>
         </vm-flow>
-      </vm-flow>
-      <br />
-      <div v-if="products.length === 0">
-        Für diese Bäckerei wurden noch keine Produkte registriert
-      </div>
-      <vm-grid>
-        <section v-for="p in products" :key="p.id">
-          <vm-avatar-group>
-            <vm-avatar
-              v-for="i in p.images"
-              :key="i.name"
-              :src="i.src"
-              :title="i.name"
-            />
-          </vm-avatar-group>
-          <div class="p-name">{{ p.name }}</div>
-          <div class="p-price">{{ p.price }}€</div>
-          <vm-button round variant="transparent" color="primary">
-            <bi-settings height="16px" />
-          </vm-button>
-        </section>
-      </vm-grid>
+        <br />
+        <div v-if="products.length === 0">
+          Für diese Bäckerei wurden noch keine Produkte registriert
+        </div>
+        <vm-grid>
+          <section v-for="p in products" :key="p.id">
+            <vm-avatar-group>
+              <vm-avatar
+                v-for="i in p.images"
+                :key="i.name"
+                :src="i.src"
+                :title="i.name"
+              />
+            </vm-avatar-group>
+            <div class="p-name">{{ p.name }}</div>
+            <div class="p-price">{{ p.price }}€</div>
+            <vm-button round variant="transparent" color="primary">
+              <bi-settings height="16px" />
+            </vm-button>
+          </section>
+        </vm-grid>
+      </template>
     </template>
   </div>
 </template>

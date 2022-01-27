@@ -105,7 +105,10 @@ export default new Vuex.Store({
       state.bakery = typeof open === 'object' ? open : null;
       state.dialog_edit_bakery_opening_hours = !!open;
     },
-    dialog_register_product(state: any, open: boolean) {
+    dialog_register_product(state: any, open: boolean | Bakery) {
+      state.bakery = typeof open === 'object' ? open : null;
+      console.log(state.bakery);
+
       state.dialog_register_product = open;
     },
     dialog_edit_product(state: any, open: boolean) {
