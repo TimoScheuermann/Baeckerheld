@@ -39,8 +39,8 @@ module.exports = {
       ],
     },
     name: 'Bäckerheld',
-    themeColor: '#dc2626',
-    msTileColor: '#dc2626',
+    themeColor: '#f0973f',
+    msTileColor: '#f0973f',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black-translucent',
     iconPaths: {
