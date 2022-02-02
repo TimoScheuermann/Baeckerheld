@@ -9,7 +9,7 @@ export interface Product {
   name: string;
   price: number;
   description: string;
-  deliveryTime: string;
+  deliveryTime: number;
   ingredients: { name: string; amount: string }[];
   nutrition: {
     engery: string;
@@ -24,7 +24,7 @@ export interface Product {
 }
 
 export class ProductManager {
-  private static storeProducts(products: Product[]): void {
+  static storeProducts(products: Product[]): void {
     const ids = products.map((x) => x.id);
     const unchanged = this.products.filter((x) => !ids.includes(x.id));
     store.commit('products', [...unchanged, ...products]);

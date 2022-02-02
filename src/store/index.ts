@@ -24,6 +24,7 @@ export default new Vuex.Store({
     bakery: null,
     product: null,
     dialog_create_bakery: false,
+    dialog_delete_bakery: false,
     dialog_edit_bakery_name: false,
     dialog_edit_bakery_address: false,
     dialog_edit_bakery_opening_hours: false,
@@ -93,6 +94,10 @@ export default new Vuex.Store({
     dialog_create_bakery(state: any, open: boolean) {
       state.dialog_create_bakery = open;
     },
+    dialog_delete_bakery(state: any, open: boolean | Bakery) {
+      state.bakery = typeof open === 'object' ? open : null;
+      state.dialog_delete_bakery = open;
+    },
     dialog_edit_bakery_address(state: any, open: boolean | Bakery) {
       state.bakery = typeof open === 'object' ? open : null;
       state.dialog_edit_bakery_address = !!open;
@@ -107,8 +112,6 @@ export default new Vuex.Store({
     },
     dialog_register_product(state: any, open: boolean | Bakery) {
       state.bakery = typeof open === 'object' ? open : null;
-      console.log(state.bakery);
-
       state.dialog_register_product = open;
     },
     dialog_edit_product(state: any, open: boolean) {

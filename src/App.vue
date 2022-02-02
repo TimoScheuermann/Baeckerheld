@@ -7,6 +7,8 @@
     <BHUpdateAvailable v-model="updateAvailable" @refresh="refresh" />
 
     <BHDialogCreateBakery />
+    <BHDialogDeleteBakery />
+
     <BHDialogRegisterProduct />
     <BHDialogEditProduct />
 
@@ -29,6 +31,7 @@ import BHDialogEditBakeryName from './components/dialogs/BHDialogEditBakeryName.
 import BHDialogEditBakeryOpeningHours from './components/dialogs/BHDialogEditBakeryOpeningHours.vue';
 import BHDialogEditBakeryAddress from './components/dialogs/BHDialogEditBakeryAddress.vue';
 import BHDialogEditProduct from './components/dialogs/BHDialogEditProduct.vue';
+import BHDialogDeleteBakery from './components/dialogs/BHDialogDeleteBakery.vue';
 
 @Component({
   components: {
@@ -42,6 +45,7 @@ import BHDialogEditProduct from './components/dialogs/BHDialogEditProduct.vue';
     BHDialogEditBakeryOpeningHours,
     BHDialogEditBakeryName,
     BHDialogEditProduct,
+    BHDialogDeleteBakery,
   },
 })
 export default class App extends Vue {
@@ -181,6 +185,7 @@ section {
   position: relative;
 
   &[stats] {
+    overflow: hidden;
     svg[icon] {
       left: 50%;
       top: 50%;

@@ -53,7 +53,6 @@ export default class Login extends Vue {
     backend
       .post('auth/login', this.dto)
       .then(({ data }) => {
-        console.log(data);
         Authenticator.signIn(data);
       })
       .catch(() => {

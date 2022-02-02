@@ -5,8 +5,6 @@
     title="Adresse ändern"
     @input="setDto"
   >
-    <vm-menu-button icon="cross" :filled="true" slot="button" @click="close" />
-
     <form @submit.prevent="updateBakery" v-if="bakery">
       <div class="form-input-title">Straße und Hausnummer</div>
       <div class="grid">

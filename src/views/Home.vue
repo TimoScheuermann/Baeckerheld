@@ -33,12 +33,14 @@
         @click="$store.commit('dialog_create_bakery', true)"
       >
         <bi-bakery slot="media" width="12px" />
+        <bi-chevron-right slot="action" width="12px" />
       </vm-list-item>
       <vm-list-item
         title="Produkt registrieren"
         @click="$store.commit('dialog_register_product', true)"
       >
         <bi-cart slot="media" width="12px" />
+        <bi-chevron-right slot="action" width="12px" />
       </vm-list-item>
     </vm-list>
   </div>

@@ -1,7 +1,5 @@
 <template>
   <vm-dialog class="bh-dialog-edit-product" v-model="$store.state[key]">
-    <vm-menu-button icon="cross" :filled="true" slot="button" @click="close" />
-
     <template slot="footer">
       <vm-dialog-button title="Abbrechen" color="color" />
       <vm-dialog-button title="Speichern" />

@@ -4,8 +4,6 @@
     v-model="$store.state[key]"
     title="Bäckerei erstellen"
   >
-    <vm-menu-button icon="cross" :filled="true" slot="button" @click="close" />
-
     <form @submit.prevent="createBakery">
       <div class="form-input-title">Name der Bäckerei</div>
       <vm-input v-model="dto.name" />

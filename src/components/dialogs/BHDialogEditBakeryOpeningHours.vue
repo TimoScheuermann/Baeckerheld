@@ -5,8 +5,6 @@
     title="Öffnungszeiten ändern"
     @input="setDto"
   >
-    <vm-menu-button icon="cross" :filled="true" slot="button" @click="close" />
-
     <form @submit.prevent="updateBakery" v-if="bakery">
       <template v-for="(v, k, i) in dto">
         <div class="form-input-title" :key="i">{{ $getDayName(k) }}</div>

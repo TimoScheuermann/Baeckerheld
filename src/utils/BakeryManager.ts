@@ -33,6 +33,13 @@ export class BakeryManager {
     store.commit('bakeries', [...unchanged, ...bakeries]);
   }
 
+  static removeBakery(id: string): void {
+    store.commit(
+      'bakeries',
+      this.bakeries.filter((x) => x.id !== id)
+    );
+  }
+
   static get bakeries(): Bakery[] {
     return store.getters.bakeries;
   }

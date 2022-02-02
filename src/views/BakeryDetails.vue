@@ -3,27 +3,12 @@
     <template v-if="bakery">
       <vm-flow>
         <vm-title subtitle="Einstellungen" :title="bakery.name" />
-        <vm-flow>
-          <vm-button
-            round
-            @click="$store.commit('dialog_edit_bakery_name', bakery)"
-          >
-            <bi-bakery height="16px" />
-          </vm-button>
-        </vm-flow>
+        <BHBakeryAction :bakery="bakery" />
       </vm-flow>
       <br />
 
       <vm-grid>
         <section stats>
-          <vm-button
-            round
-            variant="transparent"
-            color="primary"
-            @click="$store.commit('dialog_edit_bakery_opening_hours', bakery)"
-          >
-            <bi-settings height="16px" />
-          </vm-button>
           <bi-calendar icon />
           <span>Öffnungszeiten</span>
           <table>
@@ -35,14 +20,6 @@
         </section>
 
         <section stats>
-          <vm-button
-            round
-            variant="transparent"
-            color="primary"
-            @click="$store.commit('dialog_edit_bakery_address', bakery)"
-          >
-            <bi-settings height="16px" />
-          </vm-button>
           <bi-bakery icon />
           <span>Adresse</span>
           <table>
@@ -109,12 +86,13 @@
 </template>
 
 <script lang="ts">
+import BHBakeryAction from '@/components/actions/BHBakeryAction.vue';
 import { Bakery, BakeryManager } from '@/utils/BakeryManager';
 import { MetaInjector } from '@/utils/MetaInjector';
 import { Product, ProductManager } from '@/utils/ProductManager';
 import { Vue, Component } from 'vue-property-decorator';
 
-@Component
+@Component({ components: { BHBakeryAction } })
 export default class BakeryDetails extends Vue {
   mounted(): void {
     if (this.bakery) {
@@ -138,10 +116,9 @@ export default class BakeryDetails extends Vue {
 .view-bakery-details {
   section {
     text-align: left;
-    .vm-button {
-      position: absolute;
-      top: 2px;
-      right: 2px;
+
+    table {
+      margin-top: 5px;
     }
 
     .p-name {

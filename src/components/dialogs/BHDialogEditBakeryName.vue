@@ -5,8 +5,6 @@
     title="Namen bearbeiten"
     @input="setDto"
   >
-    <vm-menu-button icon="cross" :filled="true" slot="button" @click="close" />
-
     <form @submit.prevent="updateBakery">
       <div class="form-input-title">Neuer Name der Bäckerei</div>
       <vm-input v-model="dto.name" :placeholder="bakery ? bakery.name : ''" />
