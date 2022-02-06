@@ -23,6 +23,7 @@ export default new Vuex.Store({
     products: [],
     bakery: null,
     product: null,
+    order: null,
     dialog_create_bakery: false,
     dialog_select_bakery: false,
     dialog_delete_bakery: false,
@@ -33,6 +34,7 @@ export default new Vuex.Store({
     dialog_import_product: false,
     dialog_edit_product: false,
     dialog_delete_product: false,
+    dialog_order_details: false,
   },
   getters: {
     user: (state: any): User | null => {
@@ -131,6 +133,10 @@ export default new Vuex.Store({
     dialog_delete_product(state: any, open: boolean | Product) {
       state.product = typeof open === 'object' ? open : null;
       state.dialog_delete_product = open;
+    },
+    dialog_order_details(state: any, open: boolean | Order) {
+      state.order = typeof open === 'object' ? open : null;
+      state.dialog_order_details = open;
     },
   },
 });

@@ -27,12 +27,12 @@
       </section>
       <section stats>
         <bi-cart icon />
-        <div>{{ products.length }}</div>
+        <div>{{ $items(products) }}</div>
         <span>Produkte</span>
       </section>
       <section stats>
         <bi-euro icon />
-        <div>{{ $getTotal(orders) }}€</div>
+        <div>{{ $price($getTotal(orders)) }}€</div>
         <span>Bestellwert</span>
       </section>
     </vm-grid>
@@ -42,36 +42,44 @@
       <vm-list-item
         v-for="o in orders"
         :key="o.id"
-        :title="transformDue(o.due)"
-        :description="getDescription(o)"
+        :title="$due(o.due)"
+        :description="$description(o)"
+        @click="$store.commit('dialog_order_details', o)"
       >
         <vm-progress
           slot="media"
           type="ring"
-          :progress="getStatus(o)"
+          :progress="$status(o)"
           :ringSize="20"
           :ringWidth="3"
-          :title="getStatus(o, 100) + '%'"
+          :title="$status(o) + '%'"
         />
       </vm-list-item>
     </vm-list>
     <br />
     <vm-title subtitle="einzelne" title="Produkte" />
     <br />
-    <vm-list>
+    <!-- <vm-list>
       <vm-list-item
         v-for="p in products"
         :key="p.id + p.productId"
         :title="p.amount + 'x ' + p.name"
-        :description="transformDue(p.due)"
+        :description="$due(p.due)"
       >
-        <vm-checkbox slot="action" />
+        <vm-checkbox
+          slot="action"
+          :value="p.done"
+          @input="updateOrder(p.id, p.bakeryId, p.orderIndex)"
+        />
       </vm-list-item>
-    </vm-list>
+    </vm-list> -->
+
+    <BHSDialogOrderDetails />
   </div>
 </template>
 
 <script lang="ts">
+import BHSDialogOrderDetails from '@/components/dialogs/BHDialogOrderDetails.vue';
 import { Bakery, BakeryManager } from '@/utils/BakeryManager';
 import { Order, OrderManager, OrderProduct } from '@/utils/OrderManager';
 import { ProductManager } from '@/utils/ProductManager';
@@ -80,7 +88,7 @@ import { VMSelectSelection } from 'vuement';
 
 type OProduct = Order & OrderProduct & { name: string };
 
-@Component
+@Component({ components: { BHSDialogOrderDetails } })
 export default class Orders extends Vue {
   public selectedBakeries: string[] = [];
 
@@ -105,32 +113,6 @@ export default class Orders extends Vue {
     this.selectedBakeries = selection.filter((x) => x.state).map((x) => x.id);
   }
 
-  public transformDue(due: number): string {
-    return Intl.DateTimeFormat('de-de', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(due);
-  }
-
-  public getStatus(order: Order): number {
-    const { products } = order;
-    const _ = (products: OrderProduct[]): number => {
-      return products.map((x) => x.amount).reduce((a, b) => a + b, 0);
-    };
-    const status = _(products.filter((x) => x.done)) / _(products);
-    return Math.round(status * 1000) / 1000;
-  }
-
-  public getDescription(order: Order): string {
-    const { products } = order;
-    const status = Math.round(this.getStatus(order) * 100);
-    const total = products.map((x) => x.amount).reduce((a, b) => a + b, 0);
-    return `(${status}%) ${total} Produkte`;
-  }
-
   get products(): OProduct[] {
     const products: OProduct[] = [];
     this.orders.forEach((o) => {
@@ -143,6 +125,16 @@ export default class Orders extends Vue {
       });
     });
     return products;
+  }
+
+  public mount = Date.now() + 1000 * 2;
+  public updateOrder(
+    orderId: string,
+    bakeryId: string,
+    orderIndex: number
+  ): void {
+    if (this.mount >= Date.now()) return;
+    OrderManager.updateIndex(orderId, bakeryId, orderIndex);
   }
 }
 </script>

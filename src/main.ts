@@ -8,8 +8,13 @@ import store from './store';
 import { Authenticator } from './utils/Authenticator';
 import {
   getDayName,
+  getStatus,
   getTotal,
+  orderDescription,
+  orderItems,
+  round,
   transformAddress,
+  transformDue,
   transformPrice,
 } from './utils/Functions';
 import { SettingsUtils } from './utils/SettingsUtils';
@@ -27,6 +32,11 @@ Vue.prototype.$getTotal = getTotal;
 Vue.prototype.$getDayName = getDayName;
 Vue.prototype.$price = transformPrice;
 Vue.prototype.$address = transformAddress;
+Vue.prototype.$due = transformDue;
+Vue.prototype.$status = getStatus;
+Vue.prototype.$round = round;
+Vue.prototype.$description = orderDescription;
+Vue.prototype.$items = orderItems;
 
 new Vue({
   router,
