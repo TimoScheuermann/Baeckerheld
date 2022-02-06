@@ -19,7 +19,7 @@
         :key="b.id"
         :to="{ name: 'bakery-details', params: { id: b.id } }"
         :title="b.name"
-        :description="getAddress(b)"
+        :description="$address(b)"
       />
     </vm-list>
   </div>
@@ -33,12 +33,6 @@ import { Vue, Component } from 'vue-property-decorator';
 export default class Bakeries extends Vue {
   get bakeries(): Bakery[] {
     return BakeryManager.bakeries;
-  }
-
-  getAddress(b: Bakery): string {
-    return [b.street, b.streetNumber, b.zip, b.city]
-      .filter((x) => !!x)
-      .join(' ');
   }
 }
 </script>

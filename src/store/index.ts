@@ -32,6 +32,7 @@ export default new Vuex.Store({
     dialog_register_product: false,
     dialog_import_product: false,
     dialog_edit_product: false,
+    dialog_delete_product: false,
   },
   getters: {
     user: (state: any): User | null => {
@@ -123,8 +124,13 @@ export default new Vuex.Store({
       state.bakery = typeof open === 'object' ? open : null;
       state.dialog_import_product = open;
     },
-    dialog_edit_product(state: any, open: boolean) {
+    dialog_edit_product(state: any, open: boolean | Product) {
+      state.product = typeof open === 'object' ? open : null;
       state.dialog_edit_product = open;
+    },
+    dialog_delete_product(state: any, open: boolean | Product) {
+      state.product = typeof open === 'object' ? open : null;
+      state.dialog_delete_product = open;
     },
   },
 });

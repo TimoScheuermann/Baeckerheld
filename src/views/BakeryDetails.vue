@@ -81,7 +81,19 @@
             @click="$store.commit('dialog_edit_product', p)"
           >
             <vm-avatar :src="p.images[0].src" slot="media" />
-            <bi-settings slot="action" width="16px" />
+            <vm-action slot="action" :title="p.name">
+              <vm-action-item
+                title="Bearbeiten"
+                icon="ti-pencil"
+                @click="$store.commit('dialog_edit_product', p)"
+              />
+              <vm-action-item
+                title="Löschen"
+                icon="ti-trashcan-alt"
+                color="error"
+                @click="$store.commit('dialog_delete_product', p)"
+              />
+            </vm-action>
           </vm-list-item>
         </vm-list>
       </template>

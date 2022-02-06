@@ -161,8 +161,6 @@ export default class Settings extends Vue {
   }
 
   public setPrimary(color: string): void {
-    console.log('x');
-
     SettingsUtils.setPrimary(color);
   }
 

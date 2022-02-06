@@ -1,55 +1,52 @@
 <template>
   <vm-dialog
-    class="bh-dialog-delete-bakery"
+    class="bh-dialog-delete-product"
     v-model="$store.state[key]"
-    title="Bäckerei löschen"
+    title="Produkt löschen"
     @input="setDto"
   >
-    <span v-if="bakery">
-      Bist du dir sicher, dass du die Bäckerei
+    <span v-if="product">
+      Bist du dir sicher, dass du das Produkt
       <span highlight>
-        <b>{{ bakery.name }}</b> ({{ $address(bakery) }})
+        <b>{{ product.name }}</b> ({{ product.description }})
       </span>
       löschen möchtest?
     </span>
 
     <template slot="footer">
       <vm-dialog-button title="Abbrechen" color="color" />
-      <vm-dialog-button title="Löschen" @click="deleteBakery" color="error" />
+      <vm-dialog-button title="Löschen" @click="deleteProduct" color="error" />
     </template>
   </vm-dialog>
 </template>
 
 <script lang="ts">
 import backend from '@/utils/Backend';
-import { Bakery, BakeryManager } from '@/utils/BakeryManager';
+import { Product, ProductManager } from '@/utils/ProductManager';
 import { sendNotification } from '@/utils/Functions';
-import { noop } from 'vue-class-component/lib/util';
 import { Vue, Component } from 'vue-property-decorator';
 
 @Component
-export default class BHDialogDeleteBakery extends Vue {
-  public key = 'dialog_delete_bakery';
-  public bakery: Bakery | null = null;
+export default class BHDialogDeleteProduct extends Vue {
+  public key = 'dialog_delete_product';
+  public product: Product | null = null;
 
   public setDto(): void {
-    this.bakery = this.$store.state.bakery;
-    if (!this.bakery) this.close();
+    this.product = this.$store.state.product;
+    if (!this.product) this.close();
   }
 
-  public async deleteBakery(): Promise<void> {
-    if (!this.bakery) return;
-    const { id } = this.bakery;
+  public async deleteProduct(): Promise<void> {
+    if (!this.product) return;
+    const { id, bakeryId } = this.product;
     backend
-      .delete('bakery/' + id)
+      .delete('product/' + bakeryId + '/' + id)
       .catch((err) => {
         sendNotification({ title: 'Es ist ein Fehler aufgetreten', text: err });
       })
       .then(() => {
-        BakeryManager.removeBakery(id);
+        ProductManager.removeProduct(id);
       });
-
-    this.$router.push({ name: 'bakeries' }).catch(noop);
   }
 
   mounted(): void {
@@ -65,7 +62,7 @@ export default class BHDialogDeleteBakery extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.bh-dialog-delete-bakery {
+.bh-dialog-delete-product {
   //
 }
 </style>

@@ -8,13 +8,13 @@
 
     <BHDialogCreateBakery />
     <BHDialogDeleteBakery />
-
-    <BHDialogRegisterProduct />
-    <BHDialogEditProduct />
-
     <BHDialogEditBakeryAddress />
     <BHDialogEditBakeryOpeningHours />
     <BHDialogEditBakeryName />>
+
+    <BHDialogRegisterProduct />
+    <BHDialogEditProduct />
+    <BHDialogDeleteProduct />
   </div>
 </template>
 
@@ -31,6 +31,7 @@ import BHDialogEditBakeryOpeningHours from './components/dialogs/BHDialogEditBak
 import BHDialogEditBakeryAddress from './components/dialogs/BHDialogEditBakeryAddress.vue';
 import BHDialogEditProduct from './components/dialogs/BHDialogEditProduct.vue';
 import BHDialogDeleteBakery from './components/dialogs/BHDialogDeleteBakery.vue';
+import BHDialogDeleteProduct from './components/dialogs/BHDialogDeleteProduct.vue';
 
 @Component({
   components: {
@@ -45,6 +46,7 @@ import BHDialogDeleteBakery from './components/dialogs/BHDialogDeleteBakery.vue'
     BHDialogEditBakeryName,
     BHDialogEditProduct,
     BHDialogDeleteBakery,
+    BHDialogDeleteProduct,
   },
 })
 export default class App extends Vue {

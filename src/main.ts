@@ -6,7 +6,12 @@ import './registerServiceWorker';
 import router from './router';
 import store from './store';
 import { Authenticator } from './utils/Authenticator';
-import { getDayName, getTotal } from './utils/Functions';
+import {
+  getDayName,
+  getTotal,
+  transformAddress,
+  transformPrice,
+} from './utils/Functions';
 import { SettingsUtils } from './utils/SettingsUtils';
 
 Vue.config.productionTip = false;
@@ -20,6 +25,8 @@ SettingsUtils.loadPrimary();
 
 Vue.prototype.$getTotal = getTotal;
 Vue.prototype.$getDayName = getDayName;
+Vue.prototype.$price = transformPrice;
+Vue.prototype.$address = transformAddress;
 
 new Vue({
   router,

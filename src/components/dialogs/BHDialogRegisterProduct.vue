@@ -59,10 +59,11 @@
       <vm-divider position="leading">
         <div class="form-input-title">Nährwerte</div>
       </vm-divider>
-      <vm-grid width="150" gap="0 10px">
+
+      <vm-grid width="120" gap="0 10px">
         <div>
           <div class="form-input-title">Energie</div>
-          <vm-input v-model="dto.nutrition.engery" placeholder="1337kcal" />
+          <vm-input v-model="dto.nutrition.energy" placeholder="1337kcal" />
         </div>
         <div>
           <div class="form-input-title">Fett</div>
@@ -142,7 +143,7 @@ export default class BHDialogRegisterProduct extends Vue {
     deliveryTime: 0,
     ingredients: [] as { name: string; amount: string }[], // { name: "", amount: string }
     nutrition: {
-      engery: '',
+      energy: '',
       fat: '',
       saturates: '',
       carbonhydrate: '',
@@ -173,7 +174,7 @@ export default class BHDialogRegisterProduct extends Vue {
       deliveryTime: 0,
       ingredients: [],
       nutrition: {
-        engery: '',
+        energy: '',
         fat: '',
         saturates: '',
         carbonhydrate: '',

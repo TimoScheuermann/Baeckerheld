@@ -12,7 +12,7 @@ export interface Product {
   deliveryTime: number;
   ingredients: { name: string; amount: string }[];
   nutrition: {
-    engery: string;
+    energy: string;
     fat: string;
     saturates: string;
     carbonhydrate: string;
@@ -28,6 +28,13 @@ export class ProductManager {
     const ids = products.map((x) => x.id);
     const unchanged = this.products.filter((x) => !ids.includes(x.id));
     store.commit('products', [...unchanged, ...products]);
+  }
+
+  static removeProduct(id: string): void {
+    store.commit(
+      'products',
+      this.products.filter((x) => x.id !== id)
+    );
   }
 
   static get products(): Product[] {
@@ -54,6 +61,8 @@ export class ProductManager {
   static getProducts(
     bakeryId: string = router.currentRoute.params.id
   ): Product[] {
-    return this.products.filter((x) => x.bakeryId === bakeryId);
+    return this.products
+      .filter((x) => x.bakeryId === bakeryId)
+      .sort((a, b) => a.name.localeCompare(b.name));
   }
 }
