@@ -53,6 +53,15 @@
           <vm-flow>
             <vm-button
               round
+              background="color"
+              color="background"
+              @click="$store.commit('dialog_import_product', bakery)"
+            >
+              <bi-download height="16px" button-icon />
+              <span button-label>import</span>
+            </vm-button>
+            <vm-button
+              round
               @click="$store.commit('dialog_register_product', bakery)"
             >
               <bi-plus height="16px" />
@@ -63,36 +72,34 @@
         <div v-if="products.length === 0">
           Für diese Bäckerei wurden noch keine Produkte registriert
         </div>
-        <vm-grid>
-          <section v-for="p in products" :key="p.id">
-            <vm-avatar-group>
-              <vm-avatar
-                v-for="i in p.images"
-                :key="i.name"
-                :src="i.src"
-                :title="i.name"
-              />
-            </vm-avatar-group>
-            <div class="p-name">{{ p.name }}</div>
-            <div class="p-price">{{ p.price }}€</div>
-            <vm-button round variant="transparent" color="primary">
-              <bi-settings height="16px" />
-            </vm-button>
-          </section>
-        </vm-grid>
+        <vm-list>
+          <vm-list-item
+            v-for="p in products"
+            :key="p.id"
+            :title="p.name"
+            :description="p.price + '€'"
+            @click="$store.commit('dialog_edit_product', p)"
+          >
+            <vm-avatar :src="p.images[0].src" slot="media" />
+            <bi-settings slot="action" width="16px" />
+          </vm-list-item>
+        </vm-list>
       </template>
     </template>
+
+    <BHDialogImportProduct />
   </div>
 </template>
 
 <script lang="ts">
 import BHBakeryAction from '@/components/actions/BHBakeryAction.vue';
+import BHDialogImportProduct from '@/components/dialogs/BHDialogImportProduct.vue';
 import { Bakery, BakeryManager } from '@/utils/BakeryManager';
 import { MetaInjector } from '@/utils/MetaInjector';
 import { Product, ProductManager } from '@/utils/ProductManager';
 import { Vue, Component } from 'vue-property-decorator';
 
-@Component({ components: { BHBakeryAction } })
+@Component({ components: { BHBakeryAction, BHDialogImportProduct } })
 export default class BakeryDetails extends Vue {
   mounted(): void {
     if (this.bakery) {
@@ -120,15 +127,14 @@ export default class BakeryDetails extends Vue {
     table {
       margin-top: 5px;
     }
+  }
 
-    .p-name {
-      font-weight: 500;
-      margin: 10px 0 5px;
-    }
-    .p-price {
-      font-weight: bold;
-      color: rgba(var(--vm-color-secondary), 1);
-    }
+  [button-icon] {
+    margin-left: 0.5em;
+  }
+  span[button-label] {
+    margin: 0 0.5em;
+    font-weight: 500;
   }
 }
 </style>

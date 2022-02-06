@@ -4,6 +4,7 @@ import biCalendar from './biCalendar.vue';
 import biCart from './biCart.vue';
 import biChevronLeft from './biChevronLeft.vue';
 import biChevronRight from './biChevronRight.vue';
+import biDownload from './biDownload.vue';
 import biEuro from './biEuro.vue';
 import biFilter from './biFilter.vue';
 import biPlus from './biPlus.vue';
@@ -20,5 +21,6 @@ export const BHIcons: PluginFunction<unknown> = function registerIcons(
   Vue.component('biChevronLeft', biChevronLeft);
   Vue.component('biChevronRight', biChevronRight);
   Vue.component('biEuro', biEuro);
+  Vue.component('biDownload', biDownload);
   Vue.component('biFilter', biFilter);
 };

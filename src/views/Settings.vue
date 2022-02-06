@@ -1,62 +1,84 @@
 <template>
   <div class="view-settings">
-    <vm-title title="Einstellungen" />
-    <br />
-
-    <vm-grid>
-      <div>
-        <vm-title subtitle="Name" />
-        <vm-divider />
-        <form @submit.prevent="updateName">
-          <template v-for="(v, k) in general">
-            <div class="form-input-title" :key="v">{{ v }}</div>
+    <div>
+      <vm-title title="Einstellungen" />
+      <br />
+      <vm-title subtitle="Name" />
+      <vm-divider />
+      <form @submit.prevent="updateName">
+        <vm-grid gap="0 10px" width="120" mode="auto-fit">
+          <div v-for="(v, k) in general" :key="v">
+            <div class="form-input-title">{{ v }}</div>
             <vm-input
-              :key="k"
               :placeholder="$store.getters.user[k]"
               :disabled="sending"
               v-model="dto[k]"
             />
-          </template>
-          <br />
-          <vm-button
-            :disabled="sending"
-            title="Änderungen speichern"
-            @click="updateName"
-          />
-        </form>
-      </div>
+          </div>
+        </vm-grid>
+        <br />
+        <vm-button
+          :block="true"
+          :disabled="sending"
+          title="Änderungen speichern"
+          @click="updateName"
+        />
+      </form>
 
-      <div>
-        <vm-title subtitle="Adresse" />
-        <vm-divider />
-        <form @submit.prevent="updateAddress">
-          <template v-for="(v, k) in address">
-            <div class="form-input-title" :key="v">{{ v }}</div>
+      <br />
+      <vm-title subtitle="Adresse" />
+      <vm-divider />
+      <form @submit.prevent="updateAddress">
+        <vm-grid gap="0 10px" width="120" mode="auto-fit">
+          <div v-for="(v, k) in address" :key="v">
+            <div class="form-input-title">{{ v }}</div>
             <vm-input
-              :key="k"
               :type="k === 'zip' ? 'number' : 'text'"
               :placeholder="$store.getters.user[k]"
               :disabled="sending"
               v-model="dto[k]"
             />
-          </template>
-          <br />
-          <vm-button
-            :disabled="sending"
-            title="Änderungen speichern"
-            @click="updateAddress"
-          />
-        </form>
-      </div>
-    </vm-grid>
+          </div>
+        </vm-grid>
+        <br />
+        <vm-button
+          :block="true"
+          :disabled="sending"
+          title="Änderungen speichern"
+          @click="updateAddress"
+        />
+      </form>
+      <br />
 
-    <br />
-    <br />
+      <vm-title subtitle="Erscheinungsbild" />
+      <vm-divider />
+      <div class="form-input-title">Darkmode</div>
+      <vm-checkbox
+        v-model="isDark"
+        @input="toggleTheme"
+        :title="isDark ? 'Ausschalten' : 'Einschalten'"
+      />
+
+      <div class="form-input-title" margbot>Primär Farbe</div>
+      <vm-grid width="40" gap="10">
+        <div
+          v-for="c in colors"
+          :key="c.name"
+          @click="setPrimary(c.hex)"
+          class="avatar"
+        >
+          <vm-avatar
+            :src="`https://www.colorbook.io/imagecreator.php?hex=${c.hex}&width=1&height=1`"
+          />
+        </div>
+      </vm-grid>
+    </div>
+
     <vm-flow>
       <vm-button
         size="medium"
         title="Abmelden"
-        variant="opaque"
+        background="error"
         @click="signOut"
       />
     </vm-flow>
@@ -67,10 +89,19 @@
 import { Authenticator } from '@/utils/Authenticator';
 import backend from '@/utils/Backend';
 import { sendNotification } from '@/utils/Functions';
+import { SettingsUtils } from '@/utils/SettingsUtils';
 import { Vue, Component } from 'vue-property-decorator';
 
 @Component
 export default class Settings extends Vue {
+  public colors = [
+    { name: 'Standard', hex: 'f0973f' },
+    { name: 'Lavendel', hex: '6E7BFB' },
+    { name: 'Blau', hex: '66BFFF' },
+    { name: 'Rot', hex: 'e74c3c' },
+    { name: 'Grün', hex: '27ae60' },
+    { name: 'Violet', hex: 'D980FA' },
+  ];
   public general = {
     firstName: 'Vorname',
     lastName: 'Nachname',
@@ -124,6 +155,17 @@ export default class Settings extends Vue {
     sendNotification({ title: 'Einstellungen', text: message });
   }
 
+  public isDark = SettingsUtils.dark;
+  public toggleTheme(): void {
+    SettingsUtils.setTheme(this.isDark ? 'dark' : 'light');
+  }
+
+  public setPrimary(color: string): void {
+    console.log('x');
+
+    SettingsUtils.setPrimary(color);
+  }
+
   public signOut(): void {
     Authenticator.signOut();
   }
@@ -134,6 +176,21 @@ export default class Settings extends Vue {
 .view-settings {
   /deep/ input {
     text-align: left !important;
+  }
+
+  display: grid;
+  grid-template-rows: 1fr auto;
+  grid-gap: 50px;
+
+  [margbot] {
+    margin-bottom: 3px;
+  }
+
+  .avatar {
+    transition: 0.2s ease-in-out;
+    &:hover {
+      transform: scale(0.7);
+    }
   }
 }
 </style>

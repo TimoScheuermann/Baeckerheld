@@ -37,19 +37,26 @@
       </vm-list-item>
       <vm-list-item
         title="Produkt registrieren"
-        @click="$store.commit('dialog_register_product', true)"
+        @click="$store.commit('dialog_select_bakery', true)"
       >
         <bi-cart slot="media" width="12px" />
         <bi-chevron-right slot="action" width="12px" />
       </vm-list-item>
     </vm-list>
+
+    <BHDialogSelectBakery />
   </div>
 </template>
 
 <script lang="ts">
+import BHDialogSelectBakery from '@/components/dialogs/BHDialogSelectBakery.vue';
 import { Component, Vue } from 'vue-property-decorator';
 
-@Component
+@Component({
+  components: {
+    BHDialogSelectBakery,
+  },
+})
 export default class Home extends Vue {}
 </script>
 

@@ -2,6 +2,7 @@
   <vm-dialog
     class="bh-dialog-register-product"
     v-model="$store.state[key]"
+    title="Produkt registrieren"
     @input="setDto"
   >
     <form @submit.prevent>

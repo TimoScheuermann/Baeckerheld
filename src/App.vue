@@ -20,7 +20,6 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { registerMQ, unregisterMQ } from '@/utils/MediaQueries';
 import BHRouter from './components/BHRouter.vue';
 import BHUpdateAvailable from './components/BHUpdateAvailable.vue';
 import BHTabbar from './components/BHTabbar.vue';
@@ -69,14 +68,6 @@ export default class App extends Vue {
       this.refreshing = true;
       window.location.reload();
     });
-  }
-
-  mounted(): void {
-    registerMQ();
-  }
-
-  beforeDestroy(): void {
-    unregisterMQ();
   }
 
   public refresh(): void {
@@ -158,13 +149,12 @@ a.icon-link {
 form {
   display: flex;
   flex-direction: column;
-
-  .form-input-title {
-    color: rgba(var(--vm-color-secondary), 1);
-    padding: 5px 5px 0;
-    font-size: 0.8em;
-    font-weight: 500;
-  }
+}
+.form-input-title {
+  color: rgba(var(--vm-color-secondary), 1);
+  padding: 5px 5px 0;
+  font-size: 0.8em;
+  font-weight: 500;
 }
 
 .vm-notifications {
