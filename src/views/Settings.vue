@@ -90,6 +90,7 @@ import { Authenticator } from '@/utils/Authenticator';
 import backend from '@/utils/Backend';
 import { sendNotification } from '@/utils/Functions';
 import { SettingsUtils } from '@/utils/SettingsUtils';
+import axios from 'axios';
 import { Vue, Component } from 'vue-property-decorator';
 
 @Component
@@ -165,7 +166,12 @@ export default class Settings extends Vue {
   }
 
   public signOut(): void {
-    Authenticator.signOut();
+    backend
+      .put('https://svi-itlab.com/api/news/like/dawdawd')
+      .then(({ data }) => {
+        alert(JSON.stringify(data));
+      });
+    // Authenticator.signOut();
   }
 }
 </script>
