@@ -166,12 +166,7 @@ export default class Settings extends Vue {
   }
 
   public signOut(): void {
-    backend
-      .put('https://svi-itlab.com/api/news/like/dawdawd')
-      .then(({ data }) => {
-        alert(JSON.stringify(data));
-      });
-    // Authenticator.signOut();
+    Authenticator.signOut();
   }
 }
 </script>
