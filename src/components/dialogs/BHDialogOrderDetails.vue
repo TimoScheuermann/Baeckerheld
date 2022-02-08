@@ -42,13 +42,10 @@
             :key="p.orderIndex"
             :title="p.amount + 'x ' + p.name"
             :description="$due(p.due)"
+            @click="updateOrder(p.bakeryId, p.orderIndex)"
           >
             <vm-avatar slot="media" :src="p.images[0].src" />
-            <vm-checkbox
-              slot="action"
-              :value="p.done"
-              @input="updateOrder(p.bakeryId, p.orderIndex)"
-            />
+            <vm-checkbox slot="action" :value="p.done" />
           </vm-list-item>
         </vm-list>
       </template>
@@ -64,25 +61,35 @@ import { Vue, Component } from 'vue-property-decorator';
 @Component
 export default class BHSDialogOrderDetails extends Vue {
   public key = 'dialog_order_details';
-  public order: Order | null = null;
-  public products: (Product & OrderProduct)[] = [];
+  public orderId: string | null = null;
 
   public setDto(): void {
-    this.products = [];
-    this.order = this.$store.state.order;
-    this.mount = Date.now() + 1000 * 2;
-    if (!this.order) this.close();
-    else {
-      this.products = this.order.products.map((x) => {
-        return { ...x, ...ProductManager.getProduct(x.productId) };
-      });
-    }
+    const order = this.$store.state.order;
+    this.mount = Date.now() + 1000;
+    if (!order) this.close();
+    else this.orderId = order.id;
+  }
+
+  get order(): Order | null {
+    if (!this.orderId) return null;
+    return OrderManager.getOrder(this.orderId);
+  }
+
+  get products(): (Product & OrderProduct)[] {
+    if (!this.order) return [];
+    return { ...this.order }.products.map((x) => {
+      return { ...x, ...ProductManager.getProduct(x.productId) };
+    });
   }
 
   public mount = Date.now() + 1000 * 2;
-  public updateOrder(bakeryId: string, orderIndex: number): void {
+  public async updateOrder(
+    bakeryId: string,
+    orderIndex: number
+  ): Promise<void> {
     if (!this.order) return;
     if (this.mount >= Date.now()) return;
+
     OrderManager.updateIndex(this.order.id, bakeryId, orderIndex);
   }
 

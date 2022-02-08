@@ -44,6 +44,7 @@ export function transformPrice(price: number | Order): string {
     price = price.products.map((x) => x.price).reduce((a, b) => a + b, 0);
   }
 
+  price = Math.round(price * 100) / 100;
   const values = `${price}`.split('.');
   if (values.length === 1) values[0] = values[0] + '.00';
   else if (values[1].length === 1) values[1] = values[1] + '0';
@@ -90,4 +91,11 @@ export function orderDescription(order: Order): string {
 export function orderItems(products: Order | OrderProduct[]): number {
   if (!Array.isArray(products)) products = products.products;
   return products.map((x) => x.amount).reduce((a, b) => a + b, 0);
+}
+
+export function getWeek(date: Date): number {
+  const onejan = new Date(date.getFullYear(), 0, 1);
+  return Math.ceil(
+    ((date.getTime() - onejan.getTime()) / 86400000 + onejan.getDay() + 1) / 7
+  );
 }

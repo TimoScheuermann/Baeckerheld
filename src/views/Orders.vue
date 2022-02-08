@@ -27,7 +27,7 @@
       </section>
       <section stats>
         <bi-cart icon />
-        <div>{{ $items(products) }}</div>
+        <div>{{ productCount }}</div>
         <span>Produkte</span>
       </section>
       <section stats>
@@ -57,22 +57,31 @@
       </vm-list-item>
     </vm-list>
     <br />
+
     <vm-title subtitle="einzelne" title="Produkte" />
+    <vm-segment v-model="timespan">
+      <vm-segment-item title="Tag" />
+      <vm-segment-item title="Woche" />
+    </vm-segment>
     <br />
-    <!-- <vm-list>
-      <vm-list-item
-        v-for="p in products"
-        :key="p.id + p.productId"
-        :title="p.amount + 'x ' + p.name"
-        :description="$due(p.due)"
-      >
-        <vm-checkbox
-          slot="action"
-          :value="p.done"
-          @input="updateOrder(p.id, p.bakeryId, p.orderIndex)"
-        />
-      </vm-list-item>
-    </vm-list> -->
+
+    <div>
+      <span v-for="pl in products" :key="pl.title">
+        <br />
+        <vm-title :subtitle="pl.title" />
+        <br />
+        <vm-list>
+          <vm-list-item
+            v-for="p in pl.products"
+            :key="p.id"
+            :title="p.name"
+            :description="p.amount + ' Stk'"
+          >
+            <vm-avatar slot="media" :src="p.images[0].src" />
+          </vm-list-item>
+        </vm-list>
+      </span>
+    </div>
 
     <BHSDialogOrderDetails />
   </div>
@@ -81,60 +90,76 @@
 <script lang="ts">
 import BHSDialogOrderDetails from '@/components/dialogs/BHDialogOrderDetails.vue';
 import { Bakery, BakeryManager } from '@/utils/BakeryManager';
-import { Order, OrderManager, OrderProduct } from '@/utils/OrderManager';
-import { ProductManager } from '@/utils/ProductManager';
+import { getWeek } from '@/utils/Functions';
+import { Order, OrderManager } from '@/utils/OrderManager';
+import { Product, ProductManager } from '@/utils/ProductManager';
 import { Vue, Component } from 'vue-property-decorator';
 import { VMSelectSelection } from 'vuement';
-
-type OProduct = Order & OrderProduct & { name: string };
 
 @Component({ components: { BHSDialogOrderDetails } })
 export default class Orders extends Vue {
   public selectedBakeries: string[] = [];
-
-  private get allOrders(): Order[] {
-    return OrderManager.orders;
+  public timespan = 0;
+  public selection(selection: VMSelectSelection[]): void {
+    this.selectedBakeries = selection.filter((x) => x.state).map((x) => x.id);
   }
 
   public get orders(): Order[] {
-    return this.allOrders.filter((x) =>
+    return OrderManager.orders.filter((x) =>
       x.products.some((p) => this.selectedBakeries.includes(p.bakeryId))
     );
   }
 
+  public get productCount(): number {
+    return this.orders
+      .map((o) => o.products.map((p) => p.amount).reduce((a, b) => a + b, 0))
+      .reduce((a, b) => a + b, 0);
+  }
+
   public get uniqueBakeries(): Bakery[] {
-    const bakeries = this.allOrders
+    const bakeries = OrderManager.orders
       .map((x) => x.products.map((x) => x.bakeryId).flat())
       .flat();
     return BakeryManager.bakeries.filter((x) => bakeries.includes(x.id));
   }
 
-  public selection(selection: VMSelectSelection[]): void {
-    this.selectedBakeries = selection.filter((x) => x.state).map((x) => x.id);
+  private getTitle(due: number): string {
+    const date = new Date(due);
+    if (this.timespan === 0) {
+      return Intl.DateTimeFormat('de-de', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      }).format(date);
+    }
+    return 'KW' + getWeek(date) + ' ' + date.getFullYear();
   }
 
-  get products(): OProduct[] {
-    const products: OProduct[] = [];
-    this.orders.forEach((o) => {
-      o.products.forEach((p) => {
-        products.push({
-          ...p,
-          ...o,
-          name: ProductManager.getProduct(p.productId).name,
-        });
-      });
+  get products(): {
+    title: string;
+    products: (Product & { amount: number })[];
+  }[] {
+    type prodObj = Record<string, Record<string, Product & { amount: number }>>;
+    const _ = (id: string): Product => ProductManager.getProduct(id);
+    return Object.entries(
+      this.orders
+        .map((o) => {
+          const title = this.getTitle(o.due);
+          return o.products.map((p) => {
+            return { id: p.productId, amount: p.amount, title: title };
+          });
+        })
+        .flat()
+        .reduce((acc: prodObj, value) => {
+          const { title, id, amount } = value;
+          if (!acc[title]) acc[title] = {};
+          if (!acc[title][id]) acc[title][id] = { ..._(id), amount: amount };
+          else acc[title][id].amount += amount;
+          return acc;
+        }, {})
+    ).map(([key, value]) => {
+      return { title: key, products: Object.values(value) };
     });
-    return products;
-  }
-
-  public mount = Date.now() + 1000 * 2;
-  public updateOrder(
-    orderId: string,
-    bakeryId: string,
-    orderIndex: number
-  ): void {
-    if (this.mount >= Date.now()) return;
-    OrderManager.updateIndex(orderId, bakeryId, orderIndex);
   }
 }
 </script>
@@ -142,8 +167,11 @@ export default class Orders extends Vue {
 <style lang="scss" scoped>
 .view-orders {
   .vm-list[max] {
-    max-height: 200px;
+    max-height: 400px;
     overflow: auto;
+  }
+  .vm-select {
+    max-width: calc(90vw - 200px);
   }
 }
 </style>

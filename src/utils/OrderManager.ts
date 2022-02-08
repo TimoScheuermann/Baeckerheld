@@ -55,6 +55,7 @@ export class OrderManager {
 
   private static updateing: string[] = [];
   private static mounted = Date.now() + 1000 * 2;
+
   static updateIndex(
     orderId: string,
     bakeryId: string,
