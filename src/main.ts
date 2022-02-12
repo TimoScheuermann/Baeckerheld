@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import VueApexCharts from 'vue-apexcharts';
 import Vuement from 'vuement';
 import App from './App.vue';
 import { BHIcons } from './components/icons';
@@ -23,6 +24,7 @@ Vue.config.productionTip = false;
 
 Vue.use(Vuement, { colors: { primary: '#f0973f' } });
 Vue.use(BHIcons);
+Vue.use(VueApexCharts);
 
 Authenticator.test();
 SettingsUtils.loadTheme();

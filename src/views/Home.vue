@@ -44,18 +44,26 @@
       </vm-list-item>
     </vm-list>
 
+    <br />
+    <vm-title title="Einnahmen" subtitle="Überblick" />
+    <br />
+    <vm-spinner v-if="$store.getters.income === {}" size="5px" />
+
+    <BHChartIncome />
+    <BHChartIncomeMonth />
+
     <BHDialogSelectBakery />
   </div>
 </template>
 
 <script lang="ts">
+import BHChartIncome from '@/components/charts/BHChartIncome.vue';
+import BHChartIncomeMonth from '@/components/charts/BHChartIncomeMonth.vue';
 import BHDialogSelectBakery from '@/components/dialogs/BHDialogSelectBakery.vue';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
-  components: {
-    BHDialogSelectBakery,
-  },
+  components: { BHDialogSelectBakery, BHChartIncome, BHChartIncomeMonth },
 })
 export default class Home extends Vue {}
 </script>

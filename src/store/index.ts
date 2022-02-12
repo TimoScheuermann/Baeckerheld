@@ -2,6 +2,8 @@
 
 import router from '@/router';
 import { Bakery, BakeryManager } from '@/utils/BakeryManager';
+import { round } from '@/utils/Functions';
+import { Income, IncomeManager } from '@/utils/IncomeManager';
 import { Order, OrderManager } from '@/utils/OrderManager';
 import { Product, ProductManager } from '@/utils/ProductManager';
 import { User } from '@/utils/UserManager';
@@ -21,6 +23,7 @@ export default new Vuex.Store({
     bakeries: [],
     orders: [],
     products: [],
+    income: {},
     bakery: null,
     product: null,
     order: null,
@@ -57,6 +60,9 @@ export default new Vuex.Store({
     products: (state: any): Product[] => {
       return state.products;
     },
+    income: (state: any): Record<string, Income[]> => {
+      return state.income;
+    },
   },
   mutations: {
     savedRoute(state: any, route: RawLocation): void {
@@ -75,6 +81,7 @@ export default new Vuex.Store({
       await Promise.all([
         OrderManager.loadOrders(),
         ProductManager.loadProducts(),
+        IncomeManager.loadIncome(),
       ]);
       state.data_loaded = '1';
     },
@@ -96,6 +103,12 @@ export default new Vuex.Store({
     products(state: any, products: Product[]) {
       state.products = products;
     },
+    income(state: any, o: { bakeryId: string; income: Income[] }) {
+      state.income[o.bakeryId] = o.income.map((x) => {
+        return { month: x.month, income: round(x.income) };
+      });
+    },
+
     dialog_create_bakery(state: any, open: boolean) {
       state.dialog_create_bakery = open;
     },
